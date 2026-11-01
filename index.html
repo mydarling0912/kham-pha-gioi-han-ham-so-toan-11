@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khám Phá Giới Hạn Của Hàm Số - Toán 11 KNTT</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .font-mono-math {
+      font-family: 'Fira Code', monospace;
+    }
+    /* Custom Scrollbar for the table */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .math-tag {
+      font-feature-settings: "frac" 1, "tnum" 1;
+    }
+    /* Pulse for highlight target point */
+    @keyframes pulseHole {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.7; }
+    }
+    .pulse-ring {
+      animation: pulseHole 2s infinite ease-in-out;
+    }
+
+    /* =========================================================
+       PRAIRIE THEME — thảo nguyên rộng, nắng ấm và xanh dịu
+       Chỉ thay lớp trình bày; giữ nguyên cấu trúc và tương tác.
+       ========================================================= */
+    :root {
+      color-scheme: light;
+      --prairie-cream: #f7f4e8;
+      --prairie-paper: #fffdf5;
+      --prairie-sage: #e6ead7;
+      --prairie-green: #526b45;
+      --prairie-deep: #304b38;
+      --prairie-gold: #c69b45;
+      --prairie-sky: #dce9e5;
+      --prairie-line: #d9ddc9;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(215, 226, 190, .62), transparent 34rem),
+        radial-gradient(ellipse at 88% 18%, rgba(214, 230, 226, .72), transparent 38rem),
+        linear-gradient(180deg, #f4f3e7 0%, #f8f6eb 52%, #e9eddc 100%) !important;
+      color: #344536 !important;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: auto 0 0;
+      height: 22vh;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .45;
+      background:
+        radial-gradient(ellipse at 12% 100%, #b9c99b 0 18%, transparent 19%),
+        radial-gradient(ellipse at 45% 110%, #c8d2a8 0 26%, transparent 27%),
+        radial-gradient(ellipse at 82% 110%, #b5c69a 0 23%, transparent 24%);
+      filter: blur(18px);
+    }
+    header, body > section, #teacher-notes-panel {
+      backdrop-filter: blur(12px);
+    }
+    header {
+      background: rgba(255, 253, 245, .92) !important;
+      border-color: #d9ddc9 !important;
+      box-shadow: 0 5px 24px rgba(63, 79, 49, .07) !important;
+    }
+    body > section {
+      background: rgba(255, 253, 245, .9) !important;
+      border-color: var(--prairie-line) !important;
+    }
+    main { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+    main > section, #question-content-box, #conclusion-box,
+    main section > div, #math-keyboard-panel {
+      border-color: var(--prairie-line) !important;
+    }
+    main > section {
+      background: rgba(255, 253, 245, .96) !important;
+      box-shadow: 0 12px 34px rgba(61, 78, 49, .09) !important;
+      border-radius: 1.2rem !important;
+    }
+    .bg-white { background-color: var(--prairie-paper) !important; }
+    .bg-slate-50, .bg-slate-50\/60, .bg-slate-50\/90,
+    .bg-slate-100 { background-color: #f0f1e5 !important; }
+    .text-slate-900, .text-slate-800, .text-slate-700 { color: #344536 !important; }
+    .text-slate-600, .text-slate-500 { color: #68745f !important; }
+    .border-slate-100, .border-slate-200, .border-slate-300 {
+      border-color: var(--prairie-line) !important;
+    }
+    .bg-indigo-600 { background-color: #58734a !important; }
+    .hover\:bg-indigo-700:hover { background-color: #405b3a !important; }
+    .text-indigo-900, .text-indigo-950, .text-indigo-800,
+    .text-indigo-700, .text-indigo-600 { color: #496342 !important; }
+    .bg-indigo-50 { background-color: #edf1e4 !important; }
+    .border-indigo-200, .border-indigo-300, .border-indigo-400 {
+      border-color: #b8c6a7 !important;
+    }
+    .focus\:border-indigo-600:focus { border-color: #58734a !important; }
+    .accent-indigo-600 { accent-color: #58734a !important; }
+    .hover\:bg-indigo-50:hover { background-color: #edf1e4 !important; }
+    .hover\:text-indigo-600:hover { color: #405b3a !important; }
+    .bg-emerald-600 { background-color: #58734a !important; }
+    .from-emerald-600 { --tw-gradient-from: #58734a var(--tw-gradient-from-position) !important; }
+    .to-teal-600 { --tw-gradient-to: #a28b50 var(--tw-gradient-to-position) !important; }
+    .text-emerald-950, .text-emerald-900 { color: #38523a !important; }
+    .bg-emerald-50, .via-teal-50, .to-sky-50 { background-color: #edf1e4 !important; }
+    .border-emerald-500, .border-emerald-200 { border-color: #bdcba9 !important; }
+    button, input, .rounded-xl, .rounded-2xl { transition-duration: .2s; }
+    button {
+      box-shadow: 0 2px 5px rgba(55, 73, 43, .06);
+    }
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid rgba(198, 155, 69, .45);
+      outline-offset: 2px;
+    }
+    #canvas-container {
+      background: linear-gradient(180deg, #dce9e5 0%, #e8eddf 72%, #dce5c8 100%) !important;
+      cursor: grab;
+    }
+    #canvas-container:active { cursor: grabbing; }
+    #math-keyboard-panel {
+      background: #f1f2e7 !important;
+      border-color: #d9ddc9 !important;
+    }
+    #teacher-notes-panel {
+      background: rgba(247, 242, 220, .96) !important;
+      border-color: #e4d6a9 !important;
+      color: #5b5135 !important;
+    }
+    #conclusion-box {
+      background: linear-gradient(135deg, #eef2e3, #f7f3df 60%, #e5eee5) !important;
+      border-color: #91a77c !important;
+    }
+    .custom-scroll::-webkit-scrollbar-track { background: #edf0e4; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #b9c6a8; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #879b73; }
+    @media (max-width: 1023px) {
+      main { overflow: visible !important; }
+      main > section { min-height: 420px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased">
+
+  <!-- HEADER TRÌNH CHIẾU LỚP HỌC -->
+  <header class="bg-white border-b border-slate-200 px-4 py-2.5 shadow-xs sticky top-0 z-30">
+    <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Tiêu đề & Thông tin bài dạy -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm shadow-indigo-200">
+          lim
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">Toán 11 • Bài 16</span>
+            <span class="text-xs text-slate-500 font-medium hidden sm:inline">Hoạt động khám phá 1 (SGK Kết nối tri thức)</span>
+          </div>
+          <h1 class="text-base md:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            KHÁM PHÁ GIỚI HẠN CỦA HÀM SỐ
+          </h1>
+        </div>
+      </div>
+
+      <!-- Khung biểu diễn hàm số cố định -->
+      <div class="flex items-center gap-2 bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 shadow-2xs">
+        <span class="text-xs font-semibold text-slate-500">Hàm số cố định:</span>
+        <div class="text-sm font-bold text-indigo-900 font-mono-math">
+          f(x) = <span class="inline-block align-middle"><span class="border-b border-indigo-900 block text-center leading-none pb-0.5 text-xs">4 − x²</span><span class="block text-center leading-none pt-0.5 text-xs">x − 2</span></span> = −(x + 2) &nbsp;<span class="text-rose-600 text-xs font-bold">(x ≠ 2)</span>
+        </div>
+        <div class="hidden lg:flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-300 text-[11px] text-amber-700 font-semibold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+          <span class="w-2.5 h-2.5 rounded-full border-2 border-rose-600 bg-white inline-block"></span>
+          Điểm khuyết: (2; −4)
+        </div>
+      </div>
+
+      <!-- Công cụ Trợ giảng & Toàn màn hình -->
+      <div class="flex items-center gap-2">
+        <button id="btn-toggle-teacher-notes" class="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 border border-amber-300 text-xs font-bold rounded-lg transition flex items-center gap-1 active:scale-95">
+          <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span id="txt-teacher-notes-btn">Gợi ý dạy học</span>
+        </button>
+        <button id="btn-fullscreen" class="p-1.5 hover:bg-slate-100 text-slate-600 rounded-lg border border-slate-300 text-xs transition" title="Toàn màn hình trình chiếu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- BANNER CÔNG THỨC DÃY SỐ x_n & BÀN PHÍM VIRTUAL MATH -->
+  <section class="bg-white border-b border-slate-200 px-4 py-2 shadow-2xs z-20">
+    <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      
+      <!-- Ô nhập công thức x_n và bàn phím tương tác -->
+      <div class="flex-1 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          Dãy số xₙ tiến về 2:
+        </span>
+
+        <!-- Khung input công thức với kí hiệu x_n = -->
+        <div class="relative flex-1 min-w-[280px] max-w-xl flex items-center">
+          <div class="absolute left-3 font-mono-math font-bold text-slate-600 text-sm pointer-events-none">
+            xₙ =
+          </div>
+          <input type="text" id="input-sequence" value="(2n + 1)/n" spellcheck="false"
+                 class="w-full pl-14 pr-24 py-1.5 bg-slate-50 hover:bg-white focus:bg-white border-2 border-indigo-400 focus:border-indigo-600 text-indigo-950 font-mono-math font-bold text-sm md:text-base rounded-xl transition outline-none shadow-inner"
+                 placeholder="VD: (2n + 1)/n hoặc 2 + 1/n">
+          <button id="btn-toggle-keyboard" class="absolute right-12 top-1.5 bottom-1.5 px-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold flex items-center justify-center transition" title="Bật/Tắt bàn phím toán học">
+            ⌨️
+          </button>
+          <button id="btn-apply-formula" class="absolute right-1.5 top-1.5 bottom-1.5 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-xs rounded-lg transition shadow-xs flex items-center gap-1">
+            Áp dụng
+          </button>
+        </div>
+
+        <!-- Các mẫu dãy số gợi ý trong SGK -->
+        <div class="flex items-center flex-wrap gap-1.5">
+          <span class="text-[11px] text-slate-400 font-semibold hidden lg:inline">Dãy mẫu:</span>
+          <button class="btn-sample-seq text-xs font-mono-math font-semibold px-2.5 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 border border-slate-200 rounded-lg transition" data-seq="(2n + 1)/n">(2n+1)/n</button>
+          <button class="btn-sample-seq text-xs font-mono-math font-semibold px-2.5 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 border border-slate-200 rounded-lg transition" data-seq="2 + 1/n">2 + 1/n</button>
+          <button class="btn-sample-seq text-xs font-mono-math font-semibold px-2.5 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 border border-slate-200 rounded-lg transition" data-seq="2 - 1/n">2 − 1/n</button>
+          <button class="btn-sample-seq text-xs font-mono-math font-semibold px-2.5 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 border border-slate-200 rounded-lg transition" data-seq="2 + (-1)^n/n">2 + (−1)ⁿ/n</button>
+          <button class="btn-sample-seq text-xs font-mono-math font-semibold px-2.5 py-1 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 border border-slate-200 rounded-lg transition" data-seq="2 + 1/n^2">2 + 1/n²</button>
+        </div>
+      </div>
+
+      <!-- Thông báo trạng thái biểu thức -->
+      <div id="formula-status" class="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span id="formula-status-text">Biểu thức dãy hợp lệ • xₙ → 2 khi n → ∞</span>
+      </div>
+
+    </div>
+
+    <!-- BÀN PHÍM TOÁN HỌC TRỰC QUAN (MATH KEYBOARD OVERLAY / COLLAPSIBLE) -->
+    <div id="math-keyboard-panel" class="hidden mt-2 pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border">
+      <div class="flex flex-wrap items-center gap-1.5">
+        <span class="text-xs font-bold text-slate-500 mr-1">Bàn phím:</span>
+        <!-- Số & Biến -->
+        <button class="btn-kb px-3 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="n">n</button>
+        <div class="h-4 w-px bg-slate-300 mx-0.5"></div>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="1">1</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="2">2</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="3">3</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="4">4</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="5">5</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="0">0</button>
+        <div class="h-4 w-px bg-slate-300 mx-0.5"></div>
+        <!-- Phép toán -->
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="+">+</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="-">−</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="*">×</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="/">/</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="^">xʸ (^)</button>
+        <button class="btn-kb px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="sqrt(">√</button>
+        <button class="btn-kb px-2 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert="(">(</button>
+        <button class="btn-kb px-2 py-1 bg-white hover:bg-indigo-50 border border-slate-300 rounded font-mono-math font-bold text-sm" data-insert=")">)</button>
+        <div class="h-4 w-px bg-slate-300 mx-0.5"></div>
+        <!-- Phân số nhanh -->
+        <button class="btn-kb px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded font-mono-math font-bold text-xs" data-insert="1/n">Phân số (1/n)</button>
+        <button class="btn-kb px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded font-mono-math font-bold text-xs" data-insert="(-1)^n">Đổi dấu (-1)ⁿ</button>
+      </div>
+
+      <div class="flex items-center gap-1.5">
+        <button id="btn-kb-backspace" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded text-xs font-semibold flex items-center gap-1">
+          ⌫ Xóa 1 kí tự
+        </button>
+        <button id="btn-kb-clear" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-xs font-semibold">
+          Xóa hết
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GỢI Ý SƯ PHẠM DÀNH CHO GIÁO VIÊN (COLLAPSIBLE) -->
+  <div id="teacher-notes-panel" class="hidden bg-amber-50/90 border-b border-amber-200 px-5 py-3 transition-all">
+    <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-start justify-between gap-4">
+      <div class="space-y-1 text-xs text-amber-950 leading-relaxed">
+        <div class="font-bold text-sm text-amber-900 flex items-center gap-1.5">
+          <span>💡</span> Hướng dẫn tổ chức hoạt động khám phá 1 (Toán 11 - KNTT, trang 108):
+        </div>
+        <p>1. <b>Mục tiêu nhận thức:</b> Học sinh quan sát thấy dãy điểm <span class="font-semibold text-rose-700">xₙ trên trục hoành tiến dần về 2</span>, đồng thời điểm tương ứng trên đồ thị <span class="font-semibold text-indigo-700">(xₙ; f(xₙ))</span> chạy bám sát về phía <span class="font-semibold text-amber-800">điểm khuyết (2; −4)</span>.</p>
+        <p>2. <b>Khắc sâu nghịch lý trực quan:</b> Hàm số <span class="underline">không xác định tại x = 2</span> (đồ thị thủng một lỗ tại (2; -4)), nhưng các giá trị f(xₙ) vẫn tiến dần và hội tụ ổn định về số −4.</p>
+        <p>3. <b>Khái quát hóa:</b> Yêu cầu học sinh thử các dãy khác nhau: tiến từ bên phải (xₙ > 2), tiến từ bên trái (xₙ < 2), hoặc đan dấu quanh 2 (2 + (-1)ⁿ/n) để kiểm chứng tính độc lập của giới hạn với dãy chọn lựa.</p>
+      </div>
+      <button id="btn-close-notes" class="text-amber-800 hover:text-amber-950 text-xs font-bold underline shrink-0">
+        Đóng ghi chú
+      </button>
+    </div>
+  </div>
+
+  <!-- NỘI DUNG CHÍNH (TỶ LỆ 16:9 CHUẨN MÀN CHIẾU: 60% ĐỒ THỊ - 40% BẢNG GIÁ TRỊ) -->
+  <main class="flex-1 max-w-[1720px] w-full mx-auto p-3 flex flex-col lg:flex-row gap-3 min-h-0 overflow-hidden">
+    
+    <!-- VÙNG BÊN TRÁI: 60% ĐỒ THỊ TRỰC QUAN TRÊN CANVAS CAO CẤP -->
+    <section class="lg:w-[60%] flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[460px] relative">
+      
+      <!-- Toolbar đồ thị -->
+      <div class="px-4 py-2 bg-slate-50/90 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 z-10">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wide text-slate-700 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+            Mặt phẳng tọa độ Oxy &amp; Đồ thị y = −x − 2 (x ≠ 2)
+          </span>
+        </div>
+
+        <!-- Các nút zoom & pan -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-zoom-in" class="w-7 h-7 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-sm font-bold flex items-center justify-center transition active:scale-95 shadow-2xs" title="Phóng to">+</button>
+          <button id="btn-zoom-out" class="w-7 h-7 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-sm font-bold flex items-center justify-center transition active:scale-95 shadow-2xs" title="Thu nhỏ">−</button>
+          <button id="btn-reset-view" class="px-2.5 h-7 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold flex items-center justify-center transition active:scale-95 shadow-2xs" title="Về góc nhìn chuẩn">
+            Chuẩn
+          </button>
+          <div class="h-4 w-px bg-slate-300 mx-1"></div>
+          <label class="flex items-center gap-1 text-xs text-slate-600 cursor-pointer select-none">
+            <input type="checkbox" id="chk-show-all-points" class="rounded text-indigo-600 cursor-pointer" checked>
+            <span>Hiện vệt tất cả điểm</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Khung Canvas chứa đồ thị -->
+      <div class="flex-1 relative w-full h-full bg-slate-900 overflow-hidden cursor-crosshair" id="canvas-container">
+        <canvas id="graphCanvas" class="w-full h-full block"></canvas>
+        
+        <!-- Live HUD Tọa độ góc trên canvas -->
+        <div class="absolute bottom-3 left-3 bg-slate-950/85 backdrop-blur-sm border border-slate-700 text-slate-200 px-3 py-1.5 rounded-xl text-xs space-y-0.5 pointer-events-none shadow-lg">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+            <span>Số hạng đang chọn: <b id="hud-n-val" class="text-rose-400 font-mono-math">n = 1</b></span>
+          </div>
+          <div class="font-mono-math text-[11px] text-slate-300">
+            xₙ = <span id="hud-xn-val" class="text-amber-400 font-bold">3.000000</span> &nbsp;|&nbsp; f(xₙ) = <span id="hud-fxn-val" class="text-sky-300 font-bold">-5.000000</span>
+          </div>
+          <div class="text-[10px] text-slate-400 italic">
+            🖱️ Kéo chuột trái để di chuyển đồ thị • Lăn chuột để phóng to/thu nhỏ
+          </div>
+        </div>
+
+        <!-- Chú giải đồ họa (Legend) -->
+        <div class="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-sm border border-slate-700/80 text-white px-3 py-2 rounded-xl text-xs space-y-1.5 pointer-events-none shadow-md">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-0.5 bg-indigo-400 inline-block"></span>
+            <span class="text-indigo-200">Đồ thị y = −x − 2</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full border-2 border-rose-500 bg-slate-900 inline-block"></span>
+            <span class="text-rose-400 font-bold">Điểm khuyết (2; −4)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+            <span>Điểm xₙ trên trục Ox</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>
+            <span>Điểm (xₙ; f(xₙ))</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- VÙNG BÊN PHẢI: 40% BẢNG GIÁ TRỊ & BỘ ĐIỀU KHIỂN TƯƠNG TÁC -->
+    <section class="lg:w-[40%] flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[460px]">
+      
+      <!-- Tiêu đề bảng -->
+      <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-700">
+            BẢNG GIÁ TRỊ SỐ HỌC (n → ∞)
+          </h2>
+        </div>
+        <span class="text-[11px] text-slate-500 font-medium bg-white px-2 py-0.5 rounded border border-slate-200">
+          Chính xác cao (Không làm tròn sớm)
+        </span>
+      </div>
+
+      <!-- Bộ thanh điều khiển hoạt ảnh (Player Controls) -->
+      <div class="p-3 bg-slate-50/60 border-b border-slate-200 space-y-2">
+        <div class="flex items-center justify-between gap-1.5">
+          <button id="btn-prev-n" class="flex-1 py-1.5 px-2 bg-white hover:bg-slate-100 active:scale-95 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center justify-center gap-1 shadow-2xs">
+            ◀ Điểm trước
+          </button>
+          
+          <button id="btn-play-pause" class="flex-1 py-1.5 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 shadow-xs">
+            <span id="play-icon">▶</span>
+            <span id="play-text">Tự động chạy</span>
+          </button>
+          
+          <button id="btn-next-n" class="flex-1 py-1.5 px-2 bg-white hover:bg-slate-100 active:scale-95 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center justify-center gap-1 shadow-2xs">
+            Điểm tiếp ▶
+          </button>
+          
+          <button id="btn-reset-n" class="p-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 border border-slate-300 rounded-lg text-slate-600 text-xs font-bold transition" title="Quay về n = 1">
+            ↺
+          </button>
+        </div>
+
+        <!-- Tốc độ chạy & Thước n -->
+        <div class="flex items-center justify-between gap-3 pt-1">
+          <div class="flex items-center gap-2 flex-1">
+            <span class="text-[11px] font-semibold text-slate-500 whitespace-nowrap">Tốc độ:</span>
+            <input type="range" id="speed-slider" min="300" max="2200" step="100" value="900" class="w-full accent-indigo-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+            <span id="speed-label" class="text-[11px] font-mono-math text-slate-600 font-bold whitespace-nowrap">0.9s</span>
+          </div>
+          <div class="text-xs font-mono-math font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">
+            Mục tiêu: xₙ → 2
+          </div>
+        </div>
+      </div>
+
+      <!-- Khung bảng dữ liệu cuộn độc lập -->
+      <div class="flex-1 overflow-y-auto custom-scroll relative">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead class="bg-slate-100 text-slate-700 font-bold sticky top-0 z-10 border-b border-slate-300 shadow-2xs">
+            <tr>
+              <th class="py-2 px-3 text-center w-16">n</th>
+              <th class="py-2 px-3">xₙ (Số hạng của dãy)</th>
+              <th class="py-2 px-3">f(xₙ) = −xₙ − 2</th>
+              <th class="py-2 px-2 text-center w-14">Chọn</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-slate-100 font-mono-math">
+            <!-- Render động bằng JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tóm tắt xu hướng chân bảng -->
+      <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-xs flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <span class="text-slate-500">Xu hướng quan sát:</span>
+          <span class="font-bold text-rose-600">xₙ → 2</span>
+          <span class="text-slate-400">và</span>
+          <span class="font-bold text-indigo-700">f(xₙ) → −4</span>
+        </div>
+        <button id="btn-toggle-conclusion" class="px-3 py-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-lg text-xs shadow-xs transition active:scale-95 flex items-center gap-1">
+          <span>✨</span>
+          <span id="btn-conclusion-text">Hiện kết luận</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- KHU VỰC CÂU HỎI KHÁM PHÁ VÀ KẾT LUẬN SƯ PHẠM (DÀNH CHO HỌC SINH & GIÁO VIÊN) -->
+  <section class="max-w-[1720px] w-full mx-auto px-3 pb-3 space-y-2">
+    
+    <!-- CÂU HỎI TƯƠNG TÁC CHO HỌC SINH -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+            <span>❓</span> Hoạt động nhóm &amp; Khám phá kiến thức
+          </span>
+          <span id="current-q-badge" class="text-xs text-slate-500 font-bold">Câu hỏi 1/4</span>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <button id="btn-prev-q" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition">Câu trước</button>
+          <button id="btn-next-q" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition">Câu sau</button>
+        </div>
+      </div>
+
+      <!-- Nội dung câu hỏi xoay vòng -->
+      <div id="question-content-box" class="min-h-[46px] flex flex-col justify-center">
+        <!-- Render nội dung câu hỏi -->
+      </div>
+    </div>
+
+    <!-- KHỐI KẾT LUẬN KIẾN THỨC BÀI HỌC (ẨN MẶC ĐỊNH, GIÁO VIÊN CHỦ ĐỘNG BẬT) -->
+    <div id="conclusion-box" class="hidden bg-gradient-to-br from-emerald-50 via-teal-50 to-sky-50 border-2 border-emerald-500 rounded-2xl p-4 shadow-md transition-all">
+      <div class="flex items-start justify-between gap-3">
+        <div class="space-y-2 text-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <h3 class="text-base font-extrabold text-emerald-950 uppercase tracking-tight">
+              KẾT LUẬN KIẾN THỨC – GIỚI HẠN HỮU HẠN CỦA HÀM SỐ TẠI MỘT ĐIỂM
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm pt-1">
+            <div class="bg-white/80 p-3 rounded-xl border border-emerald-200 space-y-1.5 shadow-2xs">
+              <div class="font-bold text-emerald-900 flex items-center gap-1">
+                <span>📌</span> Nhận xét qua mô hình:
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-slate-700">
+                <li>Khi dãy số <span class="font-mono-math font-bold text-rose-600">xₙ → 2</span> (với <span class="font-mono-math">xₙ ≠ 2</span>), dãy giá trị tương ứng <span class="font-mono-math font-bold text-indigo-700">f(xₙ) → −4</span>.</li>
+                <li>Dù hàm số <span class="font-bold text-rose-700">không xác định tại x = 2</span> (điểm khuyết trên đồ thị), hàm số vẫn có giới hạn bằng <b>−4</b> khi x dần tới 2.</li>
+                <li>Mọi dãy số <span class="font-mono-math">xₙ → 2</span> bất kì đều dẫn đến <span class="font-mono-math">f(xₙ) → −4</span>.</li>
+              </ul>
+            </div>
+
+            <div class="bg-white/80 p-3 rounded-xl border border-emerald-200 flex flex-col justify-between space-y-2 shadow-2xs">
+              <div>
+                <div class="font-bold text-emerald-900 flex items-center gap-1">
+                  <span>📐</span> Kí hiệu giới hạn chính thức:
+                </div>
+                <div class="my-1.5 text-center py-2 bg-emerald-950 text-emerald-300 font-mono-math text-base md:text-lg font-bold rounded-lg border border-emerald-700 shadow-inner">
+                  lim<sub>x → 2</sub> f(x) = −4
+                </div>
+              </div>
+              <div class="text-[12px] bg-amber-100/70 border border-amber-300 p-2 rounded-lg text-amber-950 font-medium">
+                💡 <b>Thông điệp cốt lõi:</b> <i>"Giới hạn mô tả giá trị mà hàm số tiến gần tới, hoàn toàn không nhất thiết là giá trị của hàm số tại điểm đang xét."</i>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-500 italic pt-1 border-t border-emerald-200/80">
+            * <b>Lưu ý sư phạm:</b> Bảng số liệu và hình ảnh trực quan giúp học sinh nhận thức bản chất và hình thành dự đoán khoa học. Sau hoạt động này, giáo viên dẫn dắt sang định nghĩa chính thức bằng ngôn ngữ dãy số trong SGK Toán 11 (trang 109).
+          </div>
+        </div>
+
+        <button id="btn-close-conclusion" class="text-slate-400 hover:text-slate-700 p-1 text-base font-bold" title="Ẩn kết luận">
+          ✕
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TOAST BÁO LỖI NỘI BỘ (KHÔNG DÙNG ALERT) -->
+  <div id="toast-msg" class="fixed bottom-4 right-4 z-50 bg-rose-900 text-white px-4 py-2.5 rounded-xl shadow-2xl border border-rose-500 text-xs font-semibold hidden flex items-center gap-2">
+    <span>⚠️</span>
+    <span id="toast-text">Lỗi cú pháp biểu thức toán!</span>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       HỆ THỐNG TOÁN HỌC, PARSER AN TOÀN VÀ XỬ LÝ DÃY SỐ
+       ========================================================================== */
+
+    // Hàm tính f(x) = (4 - x^2)/(x - 2) với x != 2
+    // f(2) = undefined
+    function evaluateFx(x) {
+      if (Math.abs(x - 2) < 1e-12) {
+        return { isDefined: false, val: null, text: "Không xác định" };
+      }
+      // Dạng tối giản tương đương: -(x + 2)
+      const val = -(x + 2);
+      return { isDefined: true, val: val, text: val.toFixed(6) };
+    }
+
+    // Parser an toàn cho chuỗi biểu thức theo n (Không dùng eval)
+    // Hỗ trợ: số, n, +, -, *, /, ^ (lũy thừa), sqrt, ngoặc đơn
+    function createSequenceFunction(exprStr) {
+      const cleanExpr = exprStr.trim();
+      if (!cleanExpr) {
+        throw new Error("Biểu thức rỗng!");
+      }
+
+      // 1. Phân tích Token an toàn
+      // Thay thế các kí hiệu quen thuộc
+      let s = cleanExpr
+        .replace(/−/g, '-')
+        .replace(/×/g, '*')
+        .replace(/÷/g, '/');
+
+      // Kiểm tra chỉ cho phép các kí tự an toàn: 0-9, n, +, -, *, /, ^, (, ), ., sqrt
+      const safePattern = /^[0-9n\+\-\*\/\^\(\)\.\s]|(sqrt)+$/i;
+      const stripped = s.replace(/sqrt/g, '').replace(/\s+/g, '');
+      for (let ch of stripped) {
+        if (!"0123456789n+-*/^().".includes(ch)) {
+          throw new Error(`Kí tự không hợp lệ: "${ch}"`);
+        }
+      }
+
+      // Xây dựng bộ Shunting-yard hoặc biên dịch sang hàm AST mini
+      return function computeXn(nVal) {
+        if (!Number.isFinite(nVal) || nVal <= 0) return NaN;
+
+        // Thay n bằng giá trị cụ thể, xử lý dấu nhân ẩn: 2n -> 2*n, )n -> )*n, n( -> n*(
+        let prep = s
+          .replace(/([0-9])([n(])/gi, '$1*$2')
+          .replace(/([n)])([0-9])/gi, '$1*$2')
+          .replace(/(n)(\()/gi, '$1*$2')
+          .replace(/(\))(n)/gi, '$1*$2');
+
+        // Hàm tính biểu thức không dùng eval thô: sử dụng Function với sandbox Math
+        // Chuyển ^ thành **
+        let jsExpr = prep
+          .replace(/n/g, `(${nVal})`)
+          .replace(/\^/g, '**')
+          .replace(/sqrt\(/g, 'Math.sqrt(');
+
+        try {
+          const fn = new Function(`return (${jsExpr});`);
+          const res = fn();
+          if (typeof res !== 'number' || !Number.isFinite(res)) {
+            return NaN;
+          }
+          return res;
+        } catch (e) {
+          return NaN;
+        }
+      };
+    }
+
+    // Danh sách các mốc n theo chuẩn thiết kế: 1..10, ..., 100, 101, 102, ..., 1000, 1001, 1002
+    const N_MILESTONES = [
+      { type: 'num', n: 1 },
+      { type: 'num', n: 2 },
+      { type: 'num', n: 3 },
+      { type: 'num', n: 4 },
+      { type: 'num', n: 5 },
+      { type: 'num', n: 6 },
+      { type: 'num', n: 7 },
+      { type: 'num', n: 8 },
+      { type: 'num', n: 9 },
+      { type: 'num', n: 10 },
+      { type: 'dots' },
+      { type: 'num', n: 100 },
+      { type: 'num', n: 101 },
+      { type: 'num', n: 102 },
+      { type: 'dots' },
+      { type: 'num', n: 1000 },
+      { type: 'num', n: 1001 },
+      { type: 'num', n: 1002 }
+    ];
+
+    // Lọc mảng các số n thực sự tính toán
+    const VALID_N_VALUES = N_MILESTONES.filter(item => item.type === 'num').map(item => item.n);
+
+    /* ==========================================================================
+       TRẠNG THÁI ỨNG DỤNG (APPLICATION STATE)
+       ========================================================================== */
+    const state = {
+      formulaStr: "(2n + 1)/n",
+      xnEvaluator: null,
+      tableData: [], // Lưu các phần tử tính toán { n, xn, fxn, isDefined, isExact2 }
+      selectedIndex: 0, // Chỉ số n đang chọn trong danh sách VALID_N_VALUES
+      isPlaying: false,
+      playInterval: null,
+      playSpeed: 900,
+      showAllPoints: true,
+      currentQuestionIdx: 0,
+      
+      // Viewport đồ thị Oxy
+      scaleX: 55, // pixels per unit
+      scaleY: 55,
+      originX: 0, // Tọa độ pixel của gốc O
+      originY: 0,
+      isPanning: false,
+      startPanX: 0,
+      startPanY: 0,
+
+      // Điểm khuyết
+      holePoint: { x: 2, y: -4 }
+    };
+
+    /* ==========================================================================
+       DỮ LIỆU CÂU HỎI KHÁM PHÁ (SGK TOÁN 11 KNTT)
+       ========================================================================== */
+    const QUESTIONS = [
+      {
+        id: 1,
+        title: "Câu hỏi 1: Xu hướng của dãy xₙ",
+        question: "Khi n càng lớn (n → +∞), các giá trị của dãy số xₙ tiến dần tới số nào?",
+        hint: "Gợi ý: Quan sát cột xₙ trên bảng khi n = 10, 100, 1000... hoặc nhìn chuyển động của chấm đỏ trên trục hoành Ox.",
+        answer: "Các giá trị xₙ tiến rất gần đến số 2 (xₙ → 2)."
+      },
+      {
+        id: 2,
+        title: "Câu hỏi 2: Xu hướng của giá trị f(xₙ)",
+        question: "Khi xₙ tiến gần đến 2, các giá trị f(xₙ) tương ứng trên bảng và đồ thị tiến gần tới số nào?",
+        hint: "Gợi ý: Đối chiếu chấm màu cam trên đồ thị khi n tăng, quan sát tọa độ y tiến về mức nào.",
+        answer: "Các giá trị f(xₙ) tiến rất gần đến số −4 (f(xₙ) → −4)."
+      },
+      {
+        id: 3,
+        title: "Câu hỏi 3: Tập xác định tại x = 2",
+        question: "Hàm số f(x) có xác định tại x = 2 hay không? Điểm (2; −4) trên đồ thị được biểu diễn ra sao?",
+        hint: "Gợi ý: Khi thay x = 2 vào mẫu số (x − 2), mẫu bằng 0. Điểm (2; −4) có chấm đặc hay vòng tròn rỗng?",
+        answer: "Hàm số f(x) KHÔNG xác định tại x = 2. Do đó đồ thị có một điểm khuyết (vòng tròn rỗng) tại (2; −4)."
+      },
+      {
+        id: 4,
+        title: "Câu hỏi 4: Khái quát hóa với các dãy xₙ khác",
+        question: "Nếu thay đổi công thức xₙ (ví dụ: xₙ = 2 − 1/n hoặc 2 + (-1)ⁿ/n) nhưng vẫn bảo đảm xₙ ≠ 2 và xₙ → 2, kết quả quan sát có thay đổi không?",
+        hint: "Gợi ý: Bấm chọn dãy mẫu '2 − 1/n' hoặc '2 + (-1)ⁿ/n' ở trên để tự mình trải nghiệm kiểm chứng.",
+        answer: "Kết quả KHÔNG thay đổi: dù dãy xₙ tiến về 2 từ bên trái, bên phải hay đan xen thì f(xₙ) vẫn luôn tiến về −4."
+      }
+    ];
+
+    /* ==========================================================================
+       GIAO DIỆN & TƯƠNG TÁC CANVAS ĐỒ THỊ
+       ========================================================================== */
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvas-container');
+
+    function resizeCanvas() {
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+
+      // Định vị gốc tọa độ O ở vị trí cân đối (hơi lệch lên trên để thấy rõ điểm (2; -4))
+      if (state.originX === 0 && state.originY === 0) {
+        state.originX = rect.width * 0.35;
+        state.originY = rect.height * 0.28;
+      }
+      renderGraph();
+    }
+
+    // Chuyển đổi tọa độ thế giới sang Canvas Pixel
+    function toScreen(worldX, worldY) {
+      return {
+        x: state.originX + worldX * state.scaleX,
+        y: state.originY - worldY * state.scaleY
+      };
+    }
+
+    // Chuyển đổi từ Pixel sang tọa độ thế giới
+    function toWorld(screenX, screenY) {
+      return {
+        x: (screenX - state.originX) / state.scaleX,
+        y: -(screenY - state.originY) / state.scaleY
+      };
+    }
+
+    // Hàm vẽ toàn bộ đồ thị
+    function renderGraph() {
+      const rect = container.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      // Xóa nền đen/than hiện đại
+      ctx.fillStyle = "#e8eee2";
+      ctx.fillRect(0, 0, w, h);
+
+      // 1. Vẽ Lưới tọa độ Grid
+      drawGrid(w, h);
+
+      // 2. Vẽ 2 Trục Ox, Oy
+      drawAxes(w, h);
+
+      // 3. Vẽ Đường tham chiếu nét đứt x = 2 và y = -4
+      drawReferenceLines(w, h);
+
+      // 4. Vẽ Đồ thị hàm số y = -x - 2 (với điểm khuyết tròn rỗng)
+      drawFunctionGraph(w, h);
+
+      // 5. Vẽ các điểm x_n và (x_n; f(x_n))
+      drawSequencePoints();
+
+      // 6. Vẽ Điểm khuyết (Hole) tại (2; -4)
+      drawHolePoint();
+    }
+
+    // Vẽ lưới phụ & vạch chia
+    function drawGrid(w, h) {
+      const bounds = {
+        left: toWorld(0, 0).x,
+        right: toWorld(w, 0).x,
+        top: toWorld(0, 0).y,
+        bottom: toWorld(0, h).y
+      };
+
+      // Xác định bước nhảy lưới theo mức độ zoom
+      let step = 1;
+      if (state.scaleX < 28) step = 2;
+      if (state.scaleX < 14) step = 5;
+      if (state.scaleX > 110) step = 0.5;
+
+      const minX = Math.floor(bounds.left / step) * step;
+      const maxX = Math.ceil(bounds.right / step) * step;
+      const minY = Math.floor(bounds.bottom / step) * step;
+      const maxY = Math.ceil(bounds.top / step) * step;
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(91, 117, 79, 0.16)"; // slate-700 mờ
+
+      // Lưới đứng
+      for (let x = minX; x <= maxX; x += step) {
+        const sX = toScreen(x, 0).x;
+        ctx.beginPath();
+        ctx.moveTo(sX, 0);
+        ctx.lineTo(sX, h);
+        ctx.stroke();
+      }
+
+      // Lưới ngang
+      for (let y = minY; y <= maxY; y += step) {
+        const sY = toScreen(0, y).y;
+        ctx.beginPath();
+        ctx.moveTo(0, sY);
+        ctx.lineTo(w, sY);
+        ctx.stroke();
+      }
+    }
+
+    // Vẽ hệ trục Ox, Oy sắc nét
+    function drawAxes(w, h) {
+      const origin = toScreen(0, 0);
+      const bounds = {
+        left: toWorld(0, 0).x,
+        right: toWorld(w, 0).x,
+        top: toWorld(0, 0).y,
+        bottom: toWorld(0, h).y
+      };
+
+      ctx.save();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#71866b"; // slate-400
+      ctx.fillStyle = "#71866b";
+
+      // Trục hoành Ox
+      if (origin.y >= 0 && origin.y <= h) {
+        ctx.beginPath();
+        ctx.moveTo(0, origin.y);
+        ctx.lineTo(w, origin.y);
+        ctx.stroke();
+
+        // Mũi tên trục Ox
+        ctx.beginPath();
+        ctx.moveTo(w - 12, origin.y - 5);
+        ctx.lineTo(w, origin.y);
+        ctx.lineTo(w - 12, origin.y + 5);
+        ctx.fill();
+
+        ctx.font = "bold 13px system-ui";
+        ctx.fillText("x", w - 18, origin.y - 10);
+      }
+
+      // Trục tung Oy
+      if (origin.x >= 0 && origin.x <= w) {
+        ctx.beginPath();
+        ctx.moveTo(origin.x, h);
+        ctx.lineTo(origin.x, 0);
+        ctx.stroke();
+
+        // Mũi tên trục Oy
+        ctx.beginPath();
+        ctx.moveTo(origin.x - 5, 12);
+        ctx.lineTo(origin.x, 0);
+        ctx.lineTo(origin.x + 5, 12);
+        ctx.fill();
+
+        ctx.font = "bold 13px system-ui";
+        ctx.fillText("y", origin.x + 10, 18);
+      }
+
+      // Gốc O
+      ctx.font = "bold 12px system-ui";
+      ctx.fillText("O", origin.x - 14, origin.y + 16);
+
+      // Số đo trên các vạch chia
+      ctx.font = "10px system-ui";
+      ctx.fillStyle = "#cbd5e1";
+
+      let step = 1;
+      if (state.scaleX < 28) step = 2;
+      if (state.scaleX < 14) step = 5;
+      if (state.scaleX > 110) step = 0.5;
+
+      const minX = Math.floor(bounds.left / step) * step;
+      const maxX = Math.ceil(bounds.right / step) * step;
+      const minY = Math.floor(bounds.bottom / step) * step;
+      const maxY = Math.ceil(bounds.top / step) * step;
+
+      // Đánh số trên Ox
+      for (let x = minX; x <= maxX; x += step) {
+        if (Math.abs(x) < 0.001) continue;
+        const s = toScreen(x, 0);
+        const yPos = Math.max(15, Math.min(h - 10, origin.y + 14));
+        ctx.fillText(Number(x.toFixed(2)), s.x - 6, yPos);
+      }
+
+      // Đánh số trên Oy
+      for (let y = minY; y <= maxY; y += step) {
+        if (Math.abs(y) < 0.001) continue;
+        const s = toScreen(0, y);
+        const xPos = Math.max(5, Math.min(w - 25, origin.x - 18));
+        ctx.fillText(Number(y.toFixed(2)), xPos, s.y + 4);
+      }
+
+      ctx.restore();
+    }
+
+    // Đường gióng nét đứt x = 2 và y = -4 dẫn đến điểm khuyết
+    function drawReferenceLines(w, h) {
+      const p = toScreen(2, -4);
+      const origin = toScreen(0, 0);
+
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = "rgba(190, 119, 82, 0.55)"; // Rose mờ
+      ctx.lineWidth = 1.5;
+
+      // Đoạn nối từ x = 2 trên Ox tới (2; -4)
+      ctx.beginPath();
+      ctx.moveTo(p.x, origin.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+
+      // Đoạn nối từ y = -4 trên Oy tới (2; -4)
+      ctx.beginPath();
+      ctx.moveTo(origin.x, p.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+
+      // Đánh dấu số 2 trên Ox màu hồng
+      ctx.font = "bold 11px system-ui";
+      ctx.fillStyle = "#b96e50";
+      ctx.fillText("2", p.x - 4, origin.y - 8);
+
+      // Đánh dấu số -4 trên Oy màu hồng
+      ctx.fillText("-4", origin.x + 8, p.y + 4);
+
+      ctx.restore();
+    }
+
+    // Đồ thị đường thẳng y = -x - 2 (x != 2)
+    function drawFunctionGraph(w, h) {
+      const leftW = toWorld(0, 0).x;
+      const rightW = toWorld(w, 0).x;
+
+      ctx.save();
+      ctx.strokeStyle = "#58734a"; // Indigo neon
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = "round";
+
+      // Nhánh 1: Từ bên trái đến sát 2 (x < 2)
+      ctx.beginPath();
+      const pLeft = toScreen(leftW, -leftW - 2);
+      const pBeforeHole = toScreen(1.985, -1.985 - 2);
+      ctx.moveTo(pLeft.x, pLeft.y);
+      ctx.lineTo(pBeforeHole.x, pBeforeHole.y);
+      ctx.stroke();
+
+      // Nhánh 2: Từ sát 2 sang bên phải (x > 2)
+      ctx.beginPath();
+      const pAfterHole = toScreen(2.015, -2.015 - 2);
+      const pRight = toScreen(rightW, -rightW - 2);
+      ctx.moveTo(pAfterHole.x, pAfterHole.y);
+      ctx.lineTo(pRight.x, pRight.y);
+      ctx.stroke();
+
+      // Tên đường thẳng
+      const labelPos = toScreen(-2.5, 0.5);
+      ctx.font = "bold 12px system-ui";
+      ctx.fillStyle = "#496342";
+      ctx.fillText("y = −(x + 2)", labelPos.x, labelPos.y);
+
+      ctx.restore();
+    }
+
+    // Điểm khuyết hình tròn rỗng tại (2; -4)
+    function drawHolePoint() {
+      const hole = toScreen(2, -4);
+
+      ctx.save();
+      // Vòng tròn hào quang nhấp nháy nhẹ để thu hút sự chú ý của học sinh
+      const time = performance.now() * 0.003;
+      const haloRadius = 14 + Math.sin(time) * 3;
+      ctx.beginPath();
+      ctx.arc(hole.x, hole.y, haloRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(185, 110, 80, 0.34)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Lõi khuyết: Vòng tròn trắng rỗng với viền đỏ đậm dày dặn
